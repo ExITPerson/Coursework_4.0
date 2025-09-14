@@ -1,0 +1,15 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+    <div class="col-8">
+        {% for message in messages %}
+        <li><a href="{% url 'mailing:message_details' message.pk %}"><font face="Areal">{{ message.subject }}</font></a></li>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

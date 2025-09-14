@@ -8,3 +8,11 @@ class Recipient(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class Message(models.Model):
+    subject = models.CharField(max_length=200, verbose_name='Тема письма', help_text='Тема письма')
+    letter = models.TextField(verbose_name='Письмо')
+
+    def __str__(self):
+        return self.subject
