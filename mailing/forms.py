@@ -1,6 +1,6 @@
 from django import forms
 
-from mailing.models import Recipient, Message
+from mailing.models import Recipient, Message, Mailing
 
 
 class RecipientForm(forms.ModelForm):
@@ -13,3 +13,8 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['subject', 'letter']
+
+class MailingForm(forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ['message', 'recipients']

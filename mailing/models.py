@@ -16,3 +16,20 @@ class Message(models.Model):
 
     def __str__(self):
         return self.subject
+
+
+class Mailing(models.Model):
+    STATUS_CHOICES = [
+        ('created', 'Создана',),
+        ('running', 'Запущена',),
+        ('completed', 'Завершена',)
+    ]
+
+    first_shipment = models.DateTimeField()
+    last_shipment = models.DateTimeField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='mailings')
+    recipients = models.ManyToManyField(Recipient)
+
+    def __str__(self):
+        return f"Mailing {self.id} - {self.get_status_display()}"
