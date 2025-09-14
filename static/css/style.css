@@ -1,0 +1,95 @@
+.navbar.bg-body-tertiary {
+    background-color: #FFE808 !important;
+}
+
+@font-face {
+  font-family: 'Pacman';
+  src: url('/static/otf/pacmania_cyrillic.otf') format('woff2'),
+       url('/static/otf/pacmania_cyrillic.otf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Widock';
+  src: url('/static/otf/widock.otf') format('woff2'),
+       url('/static/otf/widock.otf') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Pacman', sans-serif;
+  font-family: 'Widock', sans-serif;
+}
+
+.navbar-toggler-icon {
+    filter: invert(0%);
+    background-color: #FFE808 !important;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='black' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.offcanvas.offcanvas-end {
+    background-color: black !important;
+}
+
+.dropdown-menu-dark {
+    background-color: black !important;
+}
+
+.navbar-toggler {
+    border: 2px solid black; /* толщина и цвет рамки */
+    /* при необходимости добавить скругления */
+    border-radius: 4px;
+}
+
+
+.offcanvas-header {
+    display: flex;
+    justify-content: center; /* центрирует по горизонтали */
+    align-items: center;     /* выравнивает по вертикали */
+    position: relative;      /* чтобы кнопка осталась справа */
+    padding: 1rem;           /* можно настроить отступы */
+}
+
+.offcanvas-title {
+    margin: 0 auto;          /* центрирует заголовок */
+}
+
+/* Чтобы кнопка закрытия осталась справа */
+.offcanvas-header .btn-close {
+    position: absolute;
+    right: 1rem;
+}
+
+.offcanvas.offcanvas-end {
+  border-left: 2px solid #FFE808; /* жёлтая окантовка слева */
+  border-top-left-radius: 15px;   /* скругление верхнего левого угла */
+  border-bottom-left-radius: 15px; /* скругление нижнего левого угла */
+}
+
+.navbar {
+  border: 2px solid black;                              /* чёрная окантовка */
+  border-top: none;                                     /* убрать верхнюю границу */
+  border-bottom-left-radius: 15px;                      /* скругление снизу слева */
+  border-bottom-right-radius: 15px;                     /* скругление снизу справа */
+  background-color: #f8f9fa;                            /* фон можно изменить при необходимости */
+}
+
+.dropdown-menu.dropdown-menu-dark {
+    border: 2px solid #FFE808; /* жёлтая окантовка слева */
+    border-top-radius: 15px;   /* скругление верхнего левого угла */
+    border-bottom-radius: 15px;
+    align: center;
+}
+
+.dropdown-menu-center {
+  left: 100% !important;
+  transform: translateX(+3%);
+}
+
+hr.dropdown-divider {
+    border-color: #FFE808 !important;   /* жёлтый цвет */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

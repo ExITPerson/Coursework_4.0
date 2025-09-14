@@ -1,0 +1,10 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<h1> Информация о получателе </h1>
+{{ recipient.email }}
+{{ recipient.full_name }}
+{{ recipient.comment }}
+{% endblock %}

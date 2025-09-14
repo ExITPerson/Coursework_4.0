@@ -1,0 +1,15 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+    <div class="col-8">
+        {% for recipient in recipients %}
+        <li><a href="{% url 'mailing:recipient_details' recipient.pk %}"><font face="Areal">{{ recipient.email }} — {{ recipient.full_name }}</font></a></li>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

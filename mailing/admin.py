@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Recipient
 
-# Register your models here.
+
+@admin.register(Recipient)
+class RecipientAdmin(admin.ModelAdmin):
+    list_display = ('id', 'email', 'full_name',)
+    search_fields = ('email', 'full_name',)
+
