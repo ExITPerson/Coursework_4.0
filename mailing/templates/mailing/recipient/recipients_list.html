@@ -9,6 +9,7 @@
     <div class="col-8">
         {% for recipient in recipients %}
         <li><a href="{% url 'mailing:recipient_details' recipient.pk %}"><font face="Areal">{{ recipient.email }} — {{ recipient.full_name }}</font></a></li>
+        {{recipients}}
         {% endfor %}
     </div>
 </div>

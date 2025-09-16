@@ -9,6 +9,11 @@ class Recipient(models.Model):
     def __str__(self):
         return self.full_name
 
+    class Meta:
+        verbose_name = 'получатель'
+        verbose_name_plural = 'получатели'
+        ordering = ['full_name',]
+
 
 class Message(models.Model):
     subject = models.CharField(max_length=200, verbose_name='Тема письма', help_text='Тема письма')
@@ -16,6 +21,11 @@ class Message(models.Model):
 
     def __str__(self):
         return self.subject
+
+    class Meta:
+        verbose_name = 'сообщение'
+        verbose_name_plural = 'сообщения'
+        ordering = ['subject',]
 
 
 class Mailing(models.Model):
@@ -25,11 +35,15 @@ class Mailing(models.Model):
         ('completed', 'Завершена',)
     ]
 
-    first_shipment = models.DateTimeField()
-    last_shipment = models.DateTimeField()
+    first_shipment = models.DateTimeField(null=True, blank=True, editable=False)
+    last_shipment = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='mailings')
     recipients = models.ManyToManyField(Recipient)
 
     def __str__(self):
         return f"Mailing {self.id} - {self.get_status_display()}"
+
+    class Meta:
+        verbose_name = 'рассылка'
+        verbose_name_plural = 'рассылки'
