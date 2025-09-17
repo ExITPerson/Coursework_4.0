@@ -39,7 +39,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,5 +103,10 @@ EMAIL_USE_TLS = True if os.getenv('EMAIL_USE_TLS') == 'True' else False
 EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'baranovs11@yandex.ru'
 
 AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/mailing/home/'
+LOGOUT_REDIRECT_URL = '/mailing/home/'

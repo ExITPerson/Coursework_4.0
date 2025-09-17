@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,6 +45,18 @@
                         </ul>
                     </li>
                 </ul>
+                <div class="d-flex flex-column w-100 border-top border-secondary pt-3 mt-3">
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light mb-2">Выйти</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-light mb-2">Войти</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-outline-light">Регистрация</a>
+                    <a href="{% url 'users:reset_password' %}">Забыл пароль</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
