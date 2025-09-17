@@ -1,9 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView, ListView
 
 from mailing.forms import RecipientForm, MessageForm, MailingForm
 from mailing.models import Recipient, Message, Mailing
+from mailing.services import MailingServices
 
 
 class HomeTemplateView(TemplateView):
@@ -104,3 +107,15 @@ class MailingListView(ListView):
     model = Mailing
     template_name = 'mailing/front_mailing/mailing_list.html'
     context_object_name = 'mailings'
+
+
+class MailingSendView(View):
+    def get(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk)
+        return render(request, 'mailing/front_mailing/mailing_send.html', {'mailing': mailing})
+
+    def post(self, request, pk):
+        mailing = get_object_or_404(Mailing, pk=pk)
+        response = MailingServices.send_mailing(mailing)
+        messages.success(request, response)
+        return redirect(reverse('mailing:mailing_details', kwargs={'pk':pk}))

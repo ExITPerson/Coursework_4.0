@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'mailing/base.html' %}
 
-</body>
-</html>
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="padding-top: 54px;">
+{% for mailing in mailings %}
+    <a href="{% url 'mailing:mailing_details' mailing.pk %}">{{ mailing.name }}</a>
+{% endfor %}
+</div>
+{% endblock %}

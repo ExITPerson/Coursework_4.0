@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'mailing/base.html' %}
 
-</body>
-</html>
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="padding-top: 54px;">
+    <a href="{% url 'mailing:mailing_send' mailing.pk %}">{{ mailing.id }}</a>
+{{ mailing.name }}
+{{ mailing.get_status_display }}
+</div>
+{% endblock %}

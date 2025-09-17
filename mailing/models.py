@@ -34,7 +34,7 @@ class Mailing(models.Model):
         ('running', 'Запущена',),
         ('completed', 'Завершена',)
     ]
-
+    name = models.CharField(max_length=150)
     first_shipment = models.DateTimeField(null=True, blank=True, editable=False)
     last_shipment = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
@@ -47,3 +47,22 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+
+
+class MailingAttempt(models.Model):
+    STATUS_CHOICES = [
+        ('successfully', 'Успешно',),
+        ('not successfully', 'Не успешно',)
+    ]
+
+    datetime = models.DateTimeField(null=True, blank=True, editable=False)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=16, default='not successfully', verbose_name='Статус')
+    response_mail_server = models.TextField()
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='mailing')
+
+    def __str__(self):
+        return f"Mailing {self.id} - {self.get_status_display()}"
+
+    class Meta:
+        verbose_name = 'Попытка рассылки'
+        verbose_name_plural = 'Попытки рассылки'
