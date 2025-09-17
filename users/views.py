@@ -1,14 +1,17 @@
 import secrets
 
-from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView
 from config.settings import EMAIL_HOST_USER
 from users.models import User
 from users.forms import UserRegisterForm, UserAuthenticationForm
+from django.contrib.auth.models import Group
 
 
 class UserCreateView(CreateView):
@@ -40,6 +43,8 @@ class UserCreateView(CreateView):
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
+    group = Group.objects.get(name='Users')
+    user.groups.add(group)
     user.save()
     return redirect(reverse_lazy('users:login'))
 
@@ -48,3 +53,14 @@ class UserLoginView(LoginView):
     authentication_form = UserAuthenticationForm
     template_name = 'users/login.html'
 
+
+class BlockingUserView(LoginRequiredMixin, View):
+    def post(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+
+        if not request.user.has_perm('managers.can_blocking_user'):
+            return HttpResponseForbidden
+
+        user.is_active = False
+
+        return redirect('users:user_list')

@@ -1,10 +1,20 @@
 from django.db import models
 
+from config import settings
+
 
 class Recipient(models.Model):
     email = models.EmailField(unique=True, verbose_name='Email', help_text='Введите электронную почту')
     full_name = models.CharField(max_length=200, verbose_name='Ф.И.О.')
     comment = models.TextField(verbose_name='Комментарий')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='recipients',
+        verbose_name='Автор',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.full_name
@@ -40,6 +50,14 @@ class Mailing(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='mailings')
     recipients = models.ManyToManyField(Recipient)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='mailing',
+        verbose_name='Автор',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"Mailing {self.id} - {self.get_status_display()}"
@@ -47,6 +65,10 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+        permissions = [
+            ('can_disabling_mailings', 'Disabling mailings',),
+            ('can_mailing_static_view', 'Can mailing static view')
+        ]
 
 
 class MailingAttempt(models.Model):
