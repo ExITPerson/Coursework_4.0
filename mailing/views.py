@@ -8,6 +8,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, DeleteVie
 from mailing.forms import RecipientForm, MessageForm, MailingForm
 from mailing.models import Recipient, Message, Mailing
 from mailing.services import MailingServices
+from users.models import User
 
 
 class HomeTemplateView(TemplateView):
@@ -18,7 +19,11 @@ class RecipientCreateView(LoginRequiredMixin, CreateView):
     model = Recipient
     form_class = RecipientForm
     template_name = 'mailing/recipient/create_recipient.html'
-    success_url = reverse_lazy('mailing:recipient_details')
+    success_url = reverse_lazy('mailing:recipients_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class RecipientUpdateView(LoginRequiredMixin, UpdateView):
@@ -52,6 +57,10 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     template_name = 'mailing/message/create_message.html'
     success_url = reverse_lazy('mailing:message_list')
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
@@ -82,7 +91,12 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'mailing/front_mailing/create_mailing.html'
+    login_url = 'users:login'
     success_url = reverse_lazy('mailing:mailing_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
@@ -120,3 +134,13 @@ class MailingSendView(LoginRequiredMixin, View):
         response = MailingServices.send_mailing(mailing)
         messages.success(request, response)
         return redirect(reverse('mailing:mailing_details', kwargs={'pk':pk}))
+
+
+class BaseUserView(View):
+    def get(self, request):
+        users = User.objects.all()
+        context = {
+            'users': users,
+            'current_user': request.user,
+        }
+        return render(request, 'mailing/base.html', context)

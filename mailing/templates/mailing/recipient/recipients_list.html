@@ -6,11 +6,25 @@
 {% include 'mailing/header.html' %}
 <div class="row mt-5">
     <div class="col-4"></div>
+        <a class="button" href="{% url 'mailing:create_recipient' %}">Добавить</a>
     <div class="col-8">
+
+        <h2>Ваши клиенты</h2>
+        {% if recipients %}
         {% for recipient in recipients %}
-        <li><a href="{% url 'mailing:recipient_details' recipient.pk %}"><font face="Areal">{{ recipient.email }} — {{ recipient.full_name }}</font></a></li>
-        {{recipients}}
+        {% if recipient.author.is_staff %}
+        <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
+        {% endif %}
         {% endfor %}
+        {% if perms.user.can_list_all_recipients_view %}
+        <h2>Клиенты клиентов сервиса:</h2>
+        {% for recipient in recipients %}
+        {% if not recipient.author.is_staff %}
+        <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

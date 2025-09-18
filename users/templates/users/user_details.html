@@ -1,0 +1,16 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+    <div class="col-8">
+        {% if perms.user.can_list_user_view %}
+        <h2>{{ user.full_name}}</h2>
+        <h4>{{ user.email }}</h4>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

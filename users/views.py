@@ -7,7 +7,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DetailView
 from config.settings import EMAIL_HOST_USER
 from users.models import User
 from users.forms import UserRegisterForm, UserAuthenticationForm
@@ -46,7 +46,7 @@ def email_verification(request, token):
     group = Group.objects.get(name='Users')
     user.groups.add(group)
     user.save()
-    return redirect(reverse_lazy('users:login'))
+    return redirect('users:login')
 
 
 class UserLoginView(LoginView):
@@ -64,3 +64,14 @@ class BlockingUserView(LoginRequiredMixin, View):
         user.is_active = False
 
         return redirect('users:user_list')
+
+
+class UserListView(ListView):
+    model = User
+    template_name = 'users/user_list.html'
+    context_object_name = 'users'
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'users/user_details.html'

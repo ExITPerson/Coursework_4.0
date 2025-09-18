@@ -23,11 +23,22 @@ class Recipient(models.Model):
         verbose_name = 'получатель'
         verbose_name_plural = 'получатели'
         ordering = ['full_name',]
+        permissions = [
+            ('can_list_all_recipients_view', 'Can list all recipients view',),
+        ]
 
 
 class Message(models.Model):
     subject = models.CharField(max_length=200, verbose_name='Тема письма', help_text='Тема письма')
     letter = models.TextField(verbose_name='Письмо')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        verbose_name='Автор',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.subject
@@ -44,7 +55,7 @@ class Mailing(models.Model):
         ('running', 'Запущена',),
         ('completed', 'Завершена',)
     ]
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, verbose_name='Название')
     first_shipment = models.DateTimeField(null=True, blank=True, editable=False)
     last_shipment = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='created', verbose_name='Статус')
@@ -53,7 +64,7 @@ class Mailing(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='mailing',
+        related_name='mailings',
         verbose_name='Автор',
         null=True,
         blank=True
@@ -67,7 +78,8 @@ class Mailing(models.Model):
         verbose_name_plural = 'рассылки'
         permissions = [
             ('can_disabling_mailings', 'Disabling mailings',),
-            ('can_mailing_static_view', 'Can mailing static view')
+            ('can_mailing_static_view', 'Can mailing static view'),
+            ('can_list_all_mailing_view', 'Can list all mailing view',),
         ]
 
 

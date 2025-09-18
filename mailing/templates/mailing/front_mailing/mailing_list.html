@@ -3,9 +3,24 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
-<div style="padding-top: 54px;">
-{% for mailing in mailings %}
+
+<div style="padding-top: 100px;">
+    <a class="button" href="{% url 'mailing:create_mailing' %}">Добавить</a>
+    <h2>Ваши рассылки</h2>
+    {% if mailings %}
+    {% for mailing in mailings %}
+    {% if mailing.author.is_staff %}
     <a href="{% url 'mailing:mailing_details' mailing.pk %}">{{ mailing.name }}</a>
-{% endfor %}
+    {% endif %}
+    {% endfor %}
+    {% if perms.user.can_list_all_mailing_view %}
+    <h2>Рассылки клиентов сервиса:</h2>
+    {% for mailing in mailings %}
+    {% if not mailing.author.is_staff %}
+    <a href="{% url 'mailing:mailing_details' mailing.pk %}">{{ mailing.name }}</a>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

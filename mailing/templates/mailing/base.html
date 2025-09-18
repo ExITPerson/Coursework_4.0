@@ -33,7 +33,7 @@
                             <font size="4">Управление рассылками</font>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-center">
-                            <li><a class="dropdown-item" href="#" style="color: white; text-align: center;">Рассылки</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mailing:mailing_list' %}" style="color: white; text-align: center;">Рассылки</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -44,6 +44,12 @@
                             <li><a class="dropdown-item" href="{% url 'mailing:message_list' %}" style="color: white; text-align: center;">Сообщения</a></li>
                         </ul>
                     </li>
+                    {% if perms.user.can_list_user_view %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:user_list' %}" style="color: white; text-align: center;"><font
+                                size="4">Пользователи</font></a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <div class="d-flex flex-column w-100 border-top border-secondary pt-3 mt-3">
                     {% if user.is_authenticated %}
