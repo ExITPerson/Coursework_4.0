@@ -3,5 +3,14 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
-<h1 class="mt-5">Hellow</h1>
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+    <div class="col-8">
+        <h2>Статистика менеджера рассылок:</h2>
+        <p>Общее колличество зарегистрированных рассылок: {{ mailings_count }}</p>
+        <p>Общее колличество запущенных рассылок сейчас: {{ mailings_running_count }}</p>
+        <p>Общее колличество уникальных получателей: {{ recipients_count }}</p>
+    </div>
+</div>
 {% endblock %}

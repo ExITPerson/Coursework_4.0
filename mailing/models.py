@@ -93,6 +93,14 @@ class MailingAttempt(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=16, default='not successfully', verbose_name='Статус')
     response_mail_server = models.TextField()
     mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='mailing')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='mailing_attempts',
+        verbose_name='Автор',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"Mailing {self.id} - {self.get_status_display()}"

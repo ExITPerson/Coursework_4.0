@@ -6,7 +6,6 @@
 {% include 'mailing/header.html' %}
 <div class="row mt-5">
     <div class="col-4"></div>
-    <a class="button" href="{% url 'mailing:create_recipient' %}">Добавить</a>
     <div class="col-8">
         {% if perms.user.can_list_user_view %}
         <h2>Пользователи сервиса</h2>

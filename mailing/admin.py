@@ -16,8 +16,8 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(Mailing)
 class MailingAdmin(admin.ModelAdmin):
-    list_display = ('message', 'status',)
-    search_fields = ('message', 'status',)
+    list_display = ('name', 'message', 'status',)
+    search_fields = ('name', 'message', 'status',)
 
 
 @admin.register(MailingAttempt)

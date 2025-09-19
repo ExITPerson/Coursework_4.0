@@ -1,3 +1,4 @@
+from IPython.core.release import author
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -8,7 +9,7 @@ from mailing.models import MailingAttempt
 class MailingServices:
 
     @staticmethod
-    def send_mailing(mailing):
+    def send_mailing(mailing, author):
         if mailing.status == 'running':
             return "Рассылка уже запущена"
 
@@ -19,6 +20,11 @@ class MailingServices:
         all_successfully = True
 
         for recipient in mailing.recipients.all():
+
+            mailing.refresh_from_db()
+            if mailing.status == 'disabled':
+                return "Рассылка была принудительно остановлена."
+
             try:
                 send_mail(
                     subject=mailing.message.subject,
@@ -26,7 +32,6 @@ class MailingServices:
                     from_email=EMAIL_HOST_USER,
                     recipient_list=[recipient.email]
                 )
-
                 status = 'successfully'
                 response = 'Письмо отправлено'
 
@@ -35,12 +40,12 @@ class MailingServices:
                 response = 'Письмо не отправлено'
                 all_successfully = False
 
-
             MailingAttempt.objects.create(
                 datetime=timezone.now(),
-                status= 'successfully' if status else 'not successfully',
-                response_mail_server = response,
-                mailing=mailing
+                status=status,
+                response_mail_server=response,
+                mailing=mailing,
+                author=author
             )
 
         mailing.status = 'completed'
