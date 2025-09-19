@@ -7,7 +7,7 @@
     <a href="{% url 'mailing:mailing_send' mailing.pk %}">{{ mailing.id }}</a>
 {{ mailing.name }}
 {{ mailing.get_status_display }}
-    {% if perms.app_name.can_disabling_mailings and mailing.status == 'running' %}
+    {% if perms.user.can_disabling_mailings and mailing.status == 'running' %}
     <form method="post" action="{% url 'mailing:mailing_disable' mailing.pk %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Остановить рассылку</button>
