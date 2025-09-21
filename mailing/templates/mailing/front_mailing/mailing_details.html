@@ -1,0 +1,33 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="padding-top: 54px;">
+    <a href="{% url 'mailing:mailing_send' mailing.pk %}">{{ mailing.id }}</a>
+    {{ mailing.name }}
+    {{ mailing.get_status_display }}
+    {% if mailing.author == user %}
+    <a href="{% url 'mailing:update_mailing' mailing.pk %}" class="btn btn-primary">Изменить</a>
+    <a href="{% url 'mailing:delete_mailing' mailing.pk %}" class="btn btn-danger">Удалить</a>
+    {% else %}
+    <h2>У вас нет доступа к этому сообщению</h2>
+    {% endif %}
+    {% if perms.user.can_disabling_mailings and mailing.status == 'running' %}
+    <form method="post" action="{% url 'mailing:mailing_disable' mailing.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Остановить рассылку</button>
+    </form>
+    {% endif %}
+    {% if user == mailing.author %}
+    {% if mailing.status == 'completed' %}
+    <h2>Статистика рассылки:</h2>
+    <p>Была запущена: {{ mailing.first_shipment }}</p>
+    <p>Время окончания рассылки: {{ mailing.last_shipment }}</p>
+    <p>Кол-во успешно отправленных сообщений: {{ messages_sent_successfully }}</p>
+    <p>Кол-во неуспешно отправленных сообщений: {{ messages_sent_not_successfully }}</p>
+    <p>Общее кол-во отправленных сообщений: {{ messages_sent_count }}</p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

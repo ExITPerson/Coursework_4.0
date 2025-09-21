@@ -1,0 +1,19 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="padding-top: 100px;">
+<h1>Профиль пользователя {{ user.full_name }}</h1>
+{% if user.avatar %}
+    <p>Аватар: <img src="{{ user.avatar.url }}" alt="{{ user.full_name }}"></p>
+{% else %}
+    <p>Аватар отсутствует</p>
+{% endif %}
+<p>Email: {{ user.email }}</p>
+<p>Номер телефона: {{ user.phone_number }}</p>
+<p>Страна: {{ user.country }}</p>
+
+<a href="{% url 'users:user_profile_update' user.pk %}"><button class="btn btn-success">Редактировать</button></a>
+</div>
+{% endblock %}

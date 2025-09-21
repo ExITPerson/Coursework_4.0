@@ -1,0 +1,34 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+        <a class="button" href="{% url 'mailing:create_recipient' %}">Добавить</a>
+    <div class="col-8">
+
+        <h2>Ваши клиенты</h2>
+        {% if recipients %}
+        {% for recipient in recipients %}
+        {% if recipient.author.id == user.id %}
+        <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
+        {% endif %}
+        {% empty %}
+        <p>У вас нет клиентов.</p>
+        {% endfor %}
+        {% if perms.user.can_list_all_recipients_view %}
+        <h2>Клиенты клиентов сервиса:</h2>
+        {% for recipient in recipients %}
+        {% if not recipient.author.id == user.id %}
+        <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
+        {% endif %}
+        {% empty %}
+        <p>Нет клиентов для показа.</p>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

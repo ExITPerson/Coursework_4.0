@@ -1,0 +1,32 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+    <div class="col-8">
+        {% if perms.user.can_list_user_view %}
+        <h2>{{ user.full_name}}</h2>
+        <h4>{{ user.email }}</h4>
+        <p>Статус пользователя: {% if user.is_active == False %}Заблокирован{% else %}Активен{% endif %}</p>
+
+        <h2>Статистика пользователя</h2>
+        <p>Успешных рассылок: {{ success_count }}</p>
+        <p>Неуспешных рассылок: {{ failure_count }}</p>
+        <p>Количество отправленных сообщения: {{ messages_sent_count }}</p>
+        {% endif %}{% if perms.managers.can_blocking_user %}
+        <form method="post" action="{% url 'users:block_user' user.id %}">
+            {% csrf_token %}
+            {% if user.is_active %}
+            <button type="submit" class="btn btn-danger">Заблокировать</button>
+            {% else %}
+            <button type="submit" class="btn btn-success">Разблокировать</button>
+            {% endif %}
+        </form>
+{% endif %}
+
+    </div>
+</div>
+{% endblock %}

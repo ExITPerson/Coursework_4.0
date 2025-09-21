@@ -1,0 +1,20 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="padding-top: 100px;">
+    {% if recipient.author.id == user.id or perms.mailing.can_list_all_recipients_view %}
+    <h1> Информация о получателе </h1>
+    {{ recipient.email }}
+    {{ recipient.full_name }}
+    {{ recipient.comment }}
+    {% if recipient.author.id == user.id %}
+        <a href="{% url 'mailing:update_recipient' recipient.pk %}" class="btn btn-primary">Изменить</a>
+        <a href="{% url 'mailing:recipient_delete' recipient.pk %}" class="btn btn-danger">Удалить</a>
+    {% endif %}
+    {% else %}
+    <h2>У вас нет доступа к этому сообщению</h2>
+    {% endif %}
+</div>
+{% endblock %}

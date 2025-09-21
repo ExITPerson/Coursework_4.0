@@ -1,0 +1,26 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+<div style="padding-top: 100px;">
+    <a class="button" href="{% url 'mailing:create_mailing' %}">Добавить</a>
+    <h2>Ваши рассылки</h2>
+    {% if mailings %}
+    {% for mailing in mailings %}
+    {% if mailing.author == user %}
+    <a href="{% url 'mailing:mailing_details' mailing.pk %}">{{ mailing.name }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if perms.user.can_list_all_mailing_view %}
+    <h2>Рассылки клиентов сервиса:</h2>
+    {% for mailing in mailings %}
+    {% if mailing.author != user %}
+    <a href="{% url 'mailing:mailing_details' mailing.pk %}">{{ mailing.name }}</a>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

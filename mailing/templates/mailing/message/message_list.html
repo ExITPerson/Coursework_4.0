@@ -1,0 +1,18 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+{% include 'mailing/header.html' %}
+<div class="row mt-5">
+    <div class="col-4"></div>
+        <a class="button" href="{% url 'mailing:create_message' %}">Добавить</a>
+    <div class="col-8">
+        {% for message in messages %}
+        {% if message.author == user %}
+        <li><a href="{% url 'mailing:message_details' message.pk %}"><font face="Areal">{{ message.subject }}</font></a></li>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
