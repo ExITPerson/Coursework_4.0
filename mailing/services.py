@@ -1,4 +1,3 @@
-from IPython.core.release import author
 from django.core.mail import send_mail
 from django.utils import timezone
 
@@ -35,7 +34,7 @@ class MailingServices:
                 status = 'successfully'
                 response = 'Письмо отправлено'
 
-            except Exception as e:
+            except Exception:
                 status = 'not successfully'
                 response = 'Письмо не отправлено'
                 all_successfully = False

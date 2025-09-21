@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -28,6 +28,7 @@ class HomeTemplateView(TemplateView):
         context['recipients_count'] = recipients_count
 
         return context
+
 
 class RecipientCreateView(LoginRequiredMixin, CreateView):
     model = Recipient
@@ -58,11 +59,21 @@ class RecipientDetailsView(LoginRequiredMixin, DetailView):
     template_name = 'mailing/recipient/recipient_details.html'
     context_object_name = 'recipient'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_author'] = self.object.author_id == self.request.user.id
+        return context
 
 class RecipientListView(LoginRequiredMixin, ListView):
     model = Recipient
     template_name = 'mailing/recipient/recipients_list.html'
     context_object_name = 'recipients'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
+        return context
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -112,12 +123,22 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'mailing/front_mailing/create_mailing.html'
     success_url = reverse_lazy('mailing:mailing_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
@@ -136,7 +157,10 @@ class MailingDetailsView(LoginRequiredMixin, DetailView):
         mailing = self.object
 
         messages_sent_successfully = MailingAttempt.objects.filter(mailing=mailing, status='successfully').count()
-        messages_sent_not_successfully = MailingAttempt.objects.filter(mailing=mailing, status='not successfully').count()
+        messages_sent_not_successfully = MailingAttempt.objects.filter(
+            mailing=mailing,
+            status='not successfully'
+        ).count()
         message_count = MailingAttempt.objects.filter(mailing=mailing).count()
 
         context['messages_sent_successfully'] = messages_sent_successfully
@@ -161,7 +185,7 @@ class MailingSendView(LoginRequiredMixin, View):
         mailing = get_object_or_404(Mailing, pk=pk)
         response = MailingServices.send_mailing(mailing, author=request.user)
         messages.success(request, response)
-        return redirect(reverse('mailing:mailing_details', kwargs={'pk':pk}))
+        return redirect(reverse('mailing:mailing_details', kwargs={'pk': pk}))
 
 
 class BaseUserView(View):

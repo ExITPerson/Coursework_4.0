@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('mailing', '0002_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -16,6 +15,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mailingattempt',
             name='author',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='mailing_attempts', to=settings.AUTH_USER_MODEL, verbose_name='Автор'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='mailing_attempts',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Автор'),
         ),
     ]

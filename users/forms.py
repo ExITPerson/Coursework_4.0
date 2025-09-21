@@ -1,11 +1,7 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from users.models import User
 from django import forms
 from django.core.exceptions import ValidationError
-
-
-User = get_user_model()
 
 
 class UserRegisterForm(UserCreationForm):
@@ -32,3 +28,39 @@ class UserAuthenticationForm(AuthenticationForm):
                 pass
 
         return super().clean()
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('avatar', 'full_name', 'phone_number', 'country',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+
+        self.fields['avatar'].widget.attrs.update(
+            {
+                'class': 'form-control',
+                'placeholder': 'Загрузите аватар'
+            }
+        )
+
+        self.fields['full_name'].widget.attrs.update(
+            {
+                'class': 'form-control',
+                'placeholder': 'Введите Ф.И.О.'
+            }
+        )
+
+        self.fields['phone_number'].widget.attrs.update(
+            {
+                'class': 'form-control',
+                'placeholder': 'Введите номер телефона'
+            }
+        )
+
+        self.fields['country'].widget.attrs.update(
+            {
+                'class': 'form-control',
+                'placeholder': 'Введите страну'
+            }
+        )

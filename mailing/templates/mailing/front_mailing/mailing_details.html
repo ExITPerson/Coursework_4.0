@@ -5,8 +5,14 @@
 {% block content %}
 <div style="padding-top: 54px;">
     <a href="{% url 'mailing:mailing_send' mailing.pk %}">{{ mailing.id }}</a>
-{{ mailing.name }}
-{{ mailing.get_status_display }}
+    {{ mailing.name }}
+    {{ mailing.get_status_display }}
+    {% if mailing.author == user %}
+    <a href="{% url 'mailing:update_mailing' mailing.pk %}" class="btn btn-primary">Изменить</a>
+    <a href="{% url 'mailing:delete_mailing' mailing.pk %}" class="btn btn-danger">Удалить</a>
+    {% else %}
+    <h2>У вас нет доступа к этому сообщению</h2>
+    {% endif %}
     {% if perms.user.can_disabling_mailings and mailing.status == 'running' %}
     <form method="post" action="{% url 'mailing:mailing_disable' mailing.pk %}">
         {% csrf_token %}

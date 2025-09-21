@@ -6,9 +6,9 @@
 <div style="padding-top: 54px;">
   <form method="post">
     {% csrf_token %}
-    <p>Вы точно хотите удалить тему: "{{message.subject}}"?</p>
+    <p>Вы точно хотите удалить сообщение: "{{message.subject}}"?</p>
     <button type="submit" class="btn btn-danger">Да</button>
-    <a href="{% url 'mailing:recipients_list' %}" class="btn btn-secondary">Отмена</a>
+    <a href="{% url 'mailing:message_list' %}" class="btn btn-secondary">Отмена</a>
   </form>
 </div>
 {% endblock %}

@@ -23,10 +23,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
+                {% if user.is_authenticated %}
                 <ul class="navbar-nav flex-grow-1 pe-3 d-flex justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" style="color: white; text-align: center;"><font size="4">Главная</font></a>
+                        <a class="nav-link" href="{% url 'users:user_profile' user.pk %}" style="color: white; text-align: center;"><font
+                                size="4">Профиль</font></a>
                     </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mailing:home' %}" style="color: white; text-align: center;"><font size="4">Главная</font></a>
+                    </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false" style="color: white; text-align: center;">
@@ -44,6 +51,7 @@
                             <li><a class="dropdown-item" href="{% url 'mailing:message_list' %}" style="color: white; text-align: center;">Сообщения</a></li>
                         </ul>
                     </li>
+                    {% endif %}
                     {% if perms.user.can_list_user_view %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'users:user_list' %}" style="color: white; text-align: center;"><font

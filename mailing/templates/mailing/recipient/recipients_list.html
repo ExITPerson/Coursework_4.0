@@ -12,16 +12,20 @@
         <h2>Ваши клиенты</h2>
         {% if recipients %}
         {% for recipient in recipients %}
-        {% if recipient.author.is_staff %}
+        {% if recipient.author.id == user.id %}
         <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
         {% endif %}
+        {% empty %}
+        <p>У вас нет клиентов.</p>
         {% endfor %}
         {% if perms.user.can_list_all_recipients_view %}
         <h2>Клиенты клиентов сервиса:</h2>
         {% for recipient in recipients %}
-        {% if not recipient.author.is_staff %}
+        {% if not recipient.author.id == user.id %}
         <a href="{% url 'mailing:recipient_details' recipient.pk %}">{{ recipient.email }}</a>
         {% endif %}
+        {% empty %}
+        <p>Нет клиентов для показа.</p>
         {% endfor %}
         {% endif %}
         {% endif %}

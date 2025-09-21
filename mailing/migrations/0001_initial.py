@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,12 +17,19 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=150, verbose_name='Название')),
                 ('first_shipment', models.DateTimeField(blank=True, editable=False, null=True)),
                 ('last_shipment', models.DateTimeField(blank=True, editable=False, null=True)),
-                ('status', models.CharField(choices=[('created', 'Создана'), ('running', 'Запущена'), ('completed', 'Завершена')], default='created', max_length=10, verbose_name='Статус')),
+                ('status',
+                 models.CharField(choices=[
+                     ('created', 'Создана'),
+                     ('running', 'Запущена'),
+                     ('completed', 'Завершена')
+                 ], default='created', max_length=10, verbose_name='Статус')),
             ],
             options={
                 'verbose_name': 'рассылка',
                 'verbose_name_plural': 'рассылки',
-                'permissions': [('can_disabling_mailings', 'Disabling mailings'), ('can_mailing_static_view', 'Can mailing static view'), ('can_list_all_mailing_view', 'Can list all mailing view')],
+                'permissions': [('can_disabling_mailings', 'Disabling mailings'),
+                                ('can_mailing_static_view', 'Can mailing static view'),
+                                ('can_list_all_mailing_view', 'Can list all mailing view')],
             },
         ),
         migrations.CreateModel(
@@ -31,7 +37,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('datetime', models.DateTimeField(blank=True, editable=False, null=True)),
-                ('status', models.CharField(choices=[('successfully', 'Успешно'), ('not successfully', 'Не успешно')], default='not successfully', max_length=16, verbose_name='Статус')),
+                ('status', models.CharField(choices=[('successfully', 'Успешно'), ('not successfully', 'Не успешно')],
+                                            default='not successfully', max_length=16, verbose_name='Статус')),
                 ('response_mail_server', models.TextField()),
             ],
             options={
@@ -56,7 +63,8 @@ class Migration(migrations.Migration):
             name='Recipient',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(help_text='Введите электронную почту', max_length=254, unique=True, verbose_name='Email')),
+                ('email', models.EmailField(help_text='Введите электронную почту', max_length=254, unique=True,
+                                            verbose_name='Email')),
                 ('full_name', models.CharField(max_length=200, verbose_name='Ф.И.О.')),
                 ('comment', models.TextField(verbose_name='Комментарий')),
             ],

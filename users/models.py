@@ -5,7 +5,11 @@ from django.db import models
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name='Email', help_text='Введите электронную почту')
+    avatar = models.ImageField(null=True, blank=True, upload_to='avatars/', verbose_name='Аватар')
     full_name = models.CharField(max_length=150, verbose_name='Ф.И.О.')
+    phone_number = models.CharField(max_length=15, null=True, blank=True, verbose_name='Phone')
+    country = models.CharField(max_length=50, verbose_name='country', help_text='Введите страну',
+                               null=True, blank=True)
 
     token = models.CharField(max_length=100, verbose_name='Token', null=True, blank=True)
 

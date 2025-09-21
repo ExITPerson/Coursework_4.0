@@ -1,18 +1,17 @@
 import secrets
 
-from IPython.core.release import author
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, TemplateView, UpdateView
 from config.settings import EMAIL_HOST_USER
 from mailing.models import MailingAttempt
 from users.models import User
-from users.forms import UserRegisterForm, UserAuthenticationForm
+from users.forms import UserRegisterForm, UserAuthenticationForm, UserUpdateForm
 from django.contrib.auth.models import Group
 
 
@@ -93,3 +92,31 @@ class UserDetailView(DetailView):
         context['messages_sent_count'] = messages_sent_count
 
         return context
+
+
+class UserProfileView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'users/user_profile.html'
+    pk_url_kwarg = 'user_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_user'] = self.request.user
+        return context
+
+
+class UserUpdateProfileView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'users/user_profile_update.html'
+
+    def get_success_url(self):
+        return reverse_lazy('users:user_profile', kwargs={'user_id': self.object.pk})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
